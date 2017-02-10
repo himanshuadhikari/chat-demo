@@ -1,0 +1,45 @@
+<chanters-element>
+    <template>
+        <style>
+        @import "static/style/chanters.css";
+        #menu {
+            color: white;
+            list-style: none;
+            top: 40px;
+            right: -20px;
+            width: 200px;
+            border-radius: 5px;
+        }
+        
+        #menu li {
+            display: block;
+            padding: 10px;
+            cursor: pointer;
+        }
+        
+        #menu li:hover {
+            background: red;
+        }
+        </style>
+        <ul id="menu" on-mouseleave="{{hideMenu}}" class="border dark-div absolute z-index-pinnacle box-shadow {{visibility}}">
+            <li on-click="{{itemClick(changeBackground, false)}}">
+                Change BackGround
+            </li>
+            <input autocomplete="" accept=".jpg, .jpeg, .png, .JPG, .JPEG, .PNG" type="file" id="background" multiple style="display:none">
+            <li on-click="{{itemClick(resizeBackground, true)}}">
+                Resize BackGround
+            </li>
+            <li on-click="{{itemClick(changeMode, true)}}">
+                Mode
+            </li>
+            <li on-click="{{itemClick(createList,false)}}">
+                Add Songs
+            </li>
+            <input autocomplete="" type="file" id="fileupload" multiple class="hidden" style="display:none">
+            <li on-click="{{clearCache}}">
+                Remove Cache
+            </li>
+        </ul>
+    </template>
+    <script src="../scripts/helpers/chanters-menu.js"></script>
+</chanters-element>

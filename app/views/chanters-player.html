@@ -1,0 +1,53 @@
+<chanters-element>
+    <template>
+        <style>
+        @import "static/style/chanters.css";
+        @import "static/style/player.css";
+        /* Let's get this party started */
+        
+        #songList::-webkit-scrollbar {
+            width: 12px;
+        }
+        /* Track */
+        
+        #songList::-webkit-scrollbar-track {
+            /*box-shadow: inset 0 2px 8px rgba(0, 0, 0, .7);*/
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+        }
+        /* Handle */
+        
+        #songList::-webkit-scrollbar-thumb {
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+            background-color: rgba(0, 0, 0, 0.6);
+            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+        }
+        
+        #songList::-webkit-scrollbar-thumb:window-inactive {
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        </style>
+        <div>
+            <chanters-notification id="notification" data-visibility="hidden" data-message="Loading..."></chanters-notification>
+            <div>
+                <ul id="songList" class="border box-shadow-inset chanters-player">
+                </ul>
+                <div></div>
+            </div>
+            <!-- visible when song is playing and new tab is open -->
+            <div id="wall" class="dark-div border">
+                <div class="poster border">
+                    <img src="{{src}}">
+                </div>
+                <h2>Now Playing : {{title}}</h2>
+                <h4>Duration : {{duration}}</h4>
+            </div>
+            <!-- visible when song is playing and new tab is open -->
+            <chanters-audio id="audioPlayer" data-visibility="hidden" data-poster="static/images/bg-default.jpg" data-currenttime="00 : 00" data-totaltime="00 : 00" data-visibility="visible"></chanters-audio>
+        </div>
+    </template>
+    <script src="../scripts/lib/mediaTags.js"></script>
+    <script src="../scripts/lib/player.js"></script>
+    <script src="../scripts/helpers/chanters-player.js"></script>
+</chanters-element>

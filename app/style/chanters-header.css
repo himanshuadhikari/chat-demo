@@ -1,0 +1,13 @@
+#currentTime {
+    position: absolute;
+    left: 19%;
+    padding: 12px 14px;
+    /*display: none;*/
+}
+
+#totalTime {
+    position: absolute;
+    left: 25%;
+    padding: 12px 14px;
+    /*display: none*/
+}

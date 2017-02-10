@@ -1,0 +1,63 @@
+<chanters-element>
+    <template>
+        <style>
+        @import "static/style/chanters.css";
+        .notification {
+            color: #eee;
+            right: 20px;
+            z-index: 99;
+            padding: 10px 10px 10px 0;
+            bottom: 100px;
+            border-radius: 5px;
+            letter-spacing: .5px;
+            word-spacing: 1px;
+            text-shadow: 0px 1px 0px #D41919, 1px 5px 0px rgba(0, 0, 0, 0.25);
+        }
+        
+        .notification > div {
+            position: relative;
+            padding: 0 10px 0px 20px;
+        }
+        
+        .imageContainer {
+            border-radius: 50%;
+            margin: auto auto 8px auto;
+            height: 60px;
+            width: 60px;
+            overflow: hidden;
+            box-shadow: inset 0px 0px 15px 0px rgba(0, 0, 0, 0.8);
+            -moz-box-shadow: inset 0px 0px 15px 0px rgba(0, 0, 0, 0.8);
+            -webkit-box-shadow: inset 0px 0px 15px 0px rgba(0, 0, 0, 0.8);
+            -o-box-shadow: inset 0px 0px 15px 0px rgba(0, 0, 0, 0.8);
+            position: relative;
+        }
+        
+        .imageContainer>img {
+            height: 60px;
+            width: 60px;
+            position: relative;
+            z-index: -1;
+        }
+        
+        .close {
+            cursor: pointer;
+            height: 4px;
+            width: 4px;
+            margin-left: 10px;
+            position: absolute;
+            right: 5px;
+            display: inline-table;
+        }
+        </style>
+        <div class="border dark-div absolute z-index-top box-shadow notification transition {{visibility}}">
+            <div>
+                <span on-click="{{delay}}" class="close">x</span>
+                <div class="imageContainer border">
+                    <img id="imgSrc" src="{{imgSrc}}" />
+                </div>
+                <span class="message">{{message}}</span>
+            </div>
+        </div>
+    </template>
+    <script src="../scripts/helpers/chanters-notification.js"></script>
+</chanters-element>

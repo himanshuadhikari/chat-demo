@@ -1,0 +1,28 @@
+<chanters-element>
+    <template>
+        <style>
+        @import "static/style/chanters.css";
+        @import "static/style/login.css";
+        @import "static/style/media.css";
+        :host {
+            position: relative;
+        }
+        </style>
+        <div id="login" style="display: {{display}}">
+            <div class="login-wrap border light-div box-shadow-inset">
+                <div class="dark-div btm-border">
+                    <button class="form-text btn-login txt-shadow cursor-pointer" title="Click here to Login" on-click="{{goToPlayer}}">
+                        Login
+                    </button>
+                </div>
+                <div class="form-wrap btm-border">
+                    <input type="email" value="{{email}}" on-keyup="{{login}}" autofocus class="form-text email" placeholder="Email address">
+                </div>
+                <div class="form-wrap">
+                    <input type="text" value="{{userName}}" on-keyup="{{login}}" placeholder="User Name" class="form-text password">
+                </div>
+            </div>
+        </div>
+    </template>
+    <script src="../scripts/helpers/chanters-login.js"></script>
+</chanters-element>

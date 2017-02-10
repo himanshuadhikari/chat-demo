@@ -1,0 +1,24 @@
+<chanters-element>
+    <template>
+        <style>
+        @import "static/style/chanters.css";
+        :host {
+            overflow: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        img {
+            min-width: 100%;
+            min-height: 100%;
+        }
+        </style>
+        <chanters-notification id="notification" data-visibility="hidden" data-message="Loading..."></chanters-notification>
+        <!-- <div class="dark-div {{savePopUp}}" style="position: absolute; top: 100px; color: white">Hit escape to save</div> -->
+        <img id="background" class="{{zIndex}}" src="{{backgroundImg}}">
+    </template>
+    <script src="../scripts/helpers/chanters-background.js"></script>
+</chanters-element>

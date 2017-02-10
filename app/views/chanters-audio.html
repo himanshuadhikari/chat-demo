@@ -1,0 +1,176 @@
+<chanters-element>
+    <template>
+        <style>
+        @import "static/style/chanters.css";
+        @import "static/style/player.css";
+        section {
+            position: relative;
+            height: 100%;
+            width: 100%;
+        }
+        
+        #audioContainer {
+            padding: 20px;
+            border-radius: 5px;
+            width: 200px;
+            left: 500px;
+            top: 50px;
+            transition: all linear 1s;
+            overflow: hidden;
+            cursor: pointer;
+            text-shadow: 2px 1px 0px rgba(0, 0, 0, .5);
+        }
+        
+        #audioContainer:hover {
+            overflow: visible;
+        }
+        
+        .light {
+            color: white;
+            background: white;
+        }
+        
+        .dark {
+            color: black;
+            background: black;
+        }
+        
+        article {
+            position: relative;
+        }
+        
+        .imageContainer {
+            height: 100px;
+            width: 100px;
+        }
+        
+        .imageContainer:after {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            -webkit-box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+            bottom: 0px;
+            width: 80%;
+            height: 50%;
+            -moz-border-radius: 100%;
+            border-radius: 100%;
+            left: 10%;
+            right: 10%;
+        }
+        
+        .blur {
+            filter: blur(5px);
+            height: 100%;
+            width: 100%;
+            left: 0;
+            top: 0;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            transition: all linear 1s;
+        }
+        
+        .title,
+        .artist,
+        .year {
+            text-align: center;
+            margin: 10px 0 0 0;
+            word-break: break-all;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .dark input[type=range]::-webkit-slider-thumb,
+        .dark input[type=range]::-webkit-slider-runnable-track {
+            background: black;
+            transition: all linear 1s;
+        }
+        
+        .light input[type=range]::-webkit-slider-thumb,
+        .light input[type=range]::-webkit-slider-runnable-track {
+            background: white;
+            transition: all linear 1s;
+        }
+        
+        input[type=range]::-webkit-slider-thumb {
+            height: 20px;
+            margin-top: -6px;
+        }
+        
+        .icon {
+            position: absolute;
+            top: 50px;
+            height: 40px;
+            width: 40px;
+            border-radius: 50%;
+        }
+        
+        .previousSong {
+            left: 17px;
+            -webkit-box-shadow: -3px 1px 0px 3px rgba(0, 0, 0, 1);
+            -moz-box-shadow: -3px 1px 0px 3px rgba(0, 0, 0, 1);
+            box-shadow: -3px 1px 0px 3px rgba(0, 0, 0, 1);
+        }
+        
+        .nextSong {
+            right: 17px;
+            -webkit-box-shadow: 3px -1px 0px 3px rgba(0, 0, 0, 1);
+            -moz-box-shadow: 3px -1px 0px 3px rgba(0, 0, 0, 1);
+            box-shadow: 3px -1px 0px 3px rgba(0, 0, 0, 1);
+        }
+        
+        .nextSong img,
+        .previousSong img,
+        #playIcon img {
+            width: inherit;
+            height: inherit;
+        }
+        
+        #playIcon {
+            opacity: 0.8;
+            height: 40px;
+            width: 40px;
+            position: absolute;
+            z-index: 9;
+            top: 30%;
+            left: 35%;
+        }
+        
+        #playIcon:hover {
+            opacity: 1;
+        }
+        </style>
+        <section>
+            <audio id="audio" controls=""></audio>
+            <div id="audioContainer" class="border absolute z-index-top box-shadow transition {{visibility}} {{theme}}">
+                <div class="blur absolute z-index-bottom" style='background-image: url("{{poster}}");'></div>
+                <canvas id="analyser"></canvas>
+                <div information>
+                    <div class="icon previousSong box-shadow">
+                        <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgaGVpZ2h0PSIyNHB4IiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0cHgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6c2tldGNoPSJodHRwOi8vd3d3LmJvaGVtaWFuY29kaW5nLmNvbS9za2V0Y2gvbnMiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj48dGl0bGUvPjxkZXNjLz48ZGVmcy8+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIiBpZD0ibWl1IiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSI+PGcgaWQ9IkFydGJvYXJkLTEiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0zOTUuMDAwMDAwLCAtMTkxLjAwMDAwMCkiPjxnIGlkPSJzbGljZSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjE1LjAwMDAwMCwgMTE5LjAwMDAwMCkiLz48cGF0aCBkPSJNMzk2LDIwMi41IEMzOTYsMTk2LjE0ODcyNSA0MDEuMTQ4NzI1LDE5MSA0MDcuNSwxOTEgQzQxMy44NTEyNzUsMTkxIDQxOSwxOTYuMTQ4NzI1IDQxOSwyMDIuNSBDNDE5LDIwOC44NTEyNzUgNDEzLjg1MTI3NSwyMTQgNDA3LjUsMjE0IEM0MDEuMTQ4NzI1LDIxNCAzOTYsMjA4Ljg1MTI3NSAzOTYsMjAyLjUgWiBNNDA4LjY1Njg1NCwxOTYuODQzMTQ2IEw0MTAuMDcxMDY4LDE5OC4yNTczNTkgTDQwNS44Mjg0MjcsMjAyLjUgTDQxMC4wNzEwNjgsMjA2Ljc0MjY0MSBMNDA4LjY1Njg1NCwyMDguMTU2ODU0IEw0MDMsMjAyLjUgTDQwOC42NTY4NTQsMTk2Ljg0MzE0NiBaIiBmaWxsPSIjMDAwMDAwIiBpZD0iY2lyY2xlLWJhY2stYXJyb3ctZ2x5cGgiLz48L2c+PC9nPjwvc3ZnPg==">
+                    </div>
+                    <div class="imageContainer border">
+                        <img style='background-image: url("{{poster}}");' />
+                        <img id="playIcon" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgaGVpZ2h0PSI1Ni42OTM0cHgiIGlkPSJMYXllcl8xIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1Ni42OTM0IDU2LjY5MzQ7IiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA1Ni42OTM0IDU2LjY5MzQiIHdpZHRoPSI1Ni42OTM0cHgiIHhtbDpzcGFjZT0icHJlc2VydmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPjxnPjxwYXRoIGQ9Ik0zOS4zMzIsMTguMDYyMkwxMi42NzQ0LDMuNzkwNUMxMS4yODkxLDMuMDQ4OSw5Ljc4NywzLjAxMSw4LjQ4NjksMy40ODVsMjIuNzExMSwyMi43MTExTDM5LjMzMiwxOC4wNjIyeiIvPjxwYXRoIGQ9Ik00OS4yNzMxLDIzLjM4NDRsLTcuNjc4Ny00LjExMDlsLTguNjU5NSw4LjY1OTRsOC42NTk1LDguNjU5NWw3LjY3ODYtNC4xMTEgICBDNTIuOTA1NCwzMC41MzY4LDUyLjkwNTQsMjUuMzI5LDQ5LjI3MzEsMjMuMzg0NHoiLz48cGF0aCBkPSJNNi40MDc3LDQuODc5NEM1LjU5MzIsNS43NzQ2LDUuMDc5OCw2Ljk2OTcsNS4wNzk4LDguMzM5djM5LjE4NzhjMCwxLjM2OTMsMC41MTM0LDIuNTY0NSwxLjMyNzgsMy40NTk3bDIzLjA1MzYtMjMuMDUzNiAgIEw2LjQwNzcsNC44Nzk0eiIvPjxwYXRoIGQ9Ik04LjQ4NjksNTIuMzgwOWMxLjMsMC40NzM5LDIuODAyMiwwLjQzNjIsNC4xODc1LTAuMzA1NUwzOS4zMzIsMzcuODAzN2wtOC4xMzM5LTguMTMzOUw4LjQ4NjksNTIuMzgwOXoiLz48L2c+PC9zdmc+">
+                    </div>
+                    <div class="icon nextSong box-shadow">
+                        <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgaGVpZ2h0PSIyNHB4IiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0cHgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6c2tldGNoPSJodHRwOi8vd3d3LmJvaGVtaWFuY29kaW5nLmNvbS9za2V0Y2gvbnMiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj48dGl0bGUvPjxkZXNjLz48ZGVmcy8+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIiBpZD0ibWl1IiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSI+PGcgaWQ9IkFydGJvYXJkLTEiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC00NjcuMDAwMDAwLCAtMTkxLjAwMDAwMCkiPjxnIGlkPSJzbGljZSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjE1LjAwMDAwMCwgMTE5LjAwMDAwMCkiLz48cGF0aCBkPSJNNDY4LDIwMi41IEM0NjgsMTk2LjE0ODcyNSA0NzMuMTQ4NzI1LDE5MSA0NzkuNSwxOTEgQzQ4NS44NTEyNzUsMTkxIDQ5MSwxOTYuMTQ4NzI1IDQ5MSwyMDIuNSBDNDkxLDIwOC44NTEyNzUgNDg1Ljg1MTI3NSwyMTQgNDc5LjUsMjE0IEM0NzMuMTQ4NzI1LDIxNCA0NjgsMjA4Ljg1MTI3NSA0NjgsMjAyLjUgWiBNNDgwLjY1Njg1NCwxOTYuODQzMTQ2IEw0ODIuMDcxMDY4LDE5OC4yNTczNTkgTDQ3Ny44Mjg0MjcsMjAyLjUgTDQ4Mi4wNzEwNjgsMjA2Ljc0MjY0MSBMNDgwLjY1Njg1NCwyMDguMTU2ODU0IEw0NzUsMjAyLjUgTDQ4MC42NTY4NTQsMTk2Ljg0MzE0NiBaIiBmaWxsPSIjMDAwMDAwIiBpZD0iY2lyY2xlLW5leHQtYXJyb3ctZGlzY2xvc3VyZS1nbHlwaCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDc5LjUwMDAwMCwgMjAyLjUwMDAwMCkgc2NhbGUoLTEsIDEpIHRyYW5zbGF0ZSgtNDc5LjUwMDAwMCwgLTIwMi41MDAwMDApICIvPjwvZz48L2c+PC9zdmc+">
+                    </div>
+                    <input id="seek" type="range" id="seek" min="0" max="100" value="0">
+                    <article>
+                        <span class="currenttime">{{currenttime}}</span>
+                        <span class="totaltime">{{totaltime}}</span>
+                        <div class="clear"></div>
+                    </article>
+                    <h3 class="text-shadow title">{{title}}</h3>
+                    <h3 class="text-shadow artist">{{artist}} - {{album}}</h3>
+                    <h3 class="text-shadow artist">{{album}}</h3>
+                    <h3 class="text-shadow year">{{year}}</h3>
+                </div>
+            </div>
+        </section>
+    </template>
+    <script src="../scripts/helpers/chanters-audio.js"></script>
+</chanters-element>

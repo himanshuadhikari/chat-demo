@@ -1,0 +1,16 @@
+<chanters-element>
+    <template>
+        <style>
+        @import "static/style/chanters.css";
+        :host {
+            overflow: hidden;
+        }
+        </style>
+        <section class="{{visibility}}">
+            <content select="chanters-header"></content>
+            <content select="chanters-background"></content>
+            <content select="chanters-content" id="chanters-content"></content>
+        </section>
+    </template>
+    <script src="../scripts/helpers/chanters-view.js"></script>
+</chanters-element>
