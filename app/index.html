@@ -16,7 +16,7 @@
         font-family: cursive;
     }
     </style>
-    <script src="static/scripts/jquery-3.0.0.min.js"></script>
+    <!--  <script src="static/scripts/jquery-3.0.0.min.js"></script>
     <script src="static/scripts/jquery-ui.min.js"></script>
     <script src="static/scripts/refactor.js"></script>
     <link rel="import" href="static/views/chanters-header.html">
@@ -25,51 +25,18 @@
     <link rel="import" href="static/views/chanters-content.html">
     <link rel="import" href="static/views/chanters-menu.html">
     <link rel="import" href="static/views/chanters-notification.html">
-    <link rel="import" href="static/views/chanters-audio.html">
+    <link rel="import" href="static/views/chanters-audio.html"> -->
     <!-- <link rel="import" href="static/views/chanters-scroll.html"> -->
-    <style type="text/css">
-    form {
-        background: #000;
-        padding: 3px;
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        z-index: 999;
-    }
-    
-    form input {
-        border: 0;
-        padding: 10px;
-        width: 90%;
-        margin-right: .5%;
-    }
-    
-    form button {
-        width: 9%;
-        background: rgb(130, 224, 255);
-        border: none;
-        padding: 10px;
-    }
-    
-    #messages {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        z-index: 999;
-    }
-    
-    #messages li {
-        padding: 5px 10px;
-    }
-    
-    #messages li:nth-child(odd) {
-        background: #eee;
-    }
-    </style>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 </head>
 
 <body>
-    <chanters-view class="hidden">
+    <ul id="future"></ul>
+    <!-- <form action=""> -->
+    <input id="chat_input" type="text" placeholder="Enter to send message" autocomplete="off" />
+    <!-- </form> -->
+    <!-- <chanters-view class="hidden">
         <chanters-header>
         </chanters-header>
         <chanters-background class="container"></chanters-background>
@@ -77,12 +44,76 @@
             <chanters-menu data-visibility="hidden" data-callback="menuItemClicked"></chanters-menu>
         </chanters-content>
         <chanters-footer></chanters-footer>
-    </chanters-view>
-    <ul id="messages"></ul>
-    <form action="">
-        <input id="m" autocomplete="off" />
-        <button>Send</button>
-    </form>
+    </chanters-view> -->
+    <script>
+    var socket = io.connect('http://localhost:4443');
+    // socket.on('connect', function(data) {
+    //     socket.emit('join', 'Hello World from client');
+    // });
+
+    // socket.on('messages', function(data) {
+    //     createChat('response', data);
+    // });
+
+    var future = document.querySelector("#future");
+
+    function createChat(id, data) {
+        var li = document.createElement("li");
+        li.id = id;
+        li.innerHTML = data;
+        future.appendChild(li);
+    }
+
+
+    socket.on('broad', function(data) {
+        var reqres = clientFlag ? "request" : "response";
+        createChat(reqres, data);
+        clientFlag = false;
+    });
+
+    var clientFlag = false;
+
+    var input = document.querySelector("#chat_input");
+    input.onchange = function(event) {
+        var message = this.value;
+        clientFlag = true;
+        socket.emit('messages', message);
+        this.value = "";
+    }
+    </script>
+    <style>
+    #chat_input {
+        margin: 0 auto;
+        width: 50%;
+        display: block;
+        height: 50px;
+        border-radius: 10px;
+        outline: none;
+        border: 1px solid #eee;
+    }
+    
+    #future {
+        position: relative;
+        width: 30%;
+        margin: 0 auto;
+        min-height: 200px;
+        overflow: scroll;
+    }
+    
+    #request {
+        color: blue;
+        text-align: right;
+        /*position: absolute;*/
+        right: 0;
+    }
+    
+    #response {
+        color: red;
+        text-align: left;
+        /*position: absolute;*/
+        left: 0;
+    }
+    </style>
 </body>
 
 </html>
